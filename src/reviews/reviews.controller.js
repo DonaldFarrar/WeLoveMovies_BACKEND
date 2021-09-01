@@ -1,7 +1,7 @@
 const reviewsService = require("./reviews.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
-const hasRequiredProperties = hasProperties("review_id");
+const hasRequiredProperties = hasProperties("content");
 
 //validations
 const VALID_PROPERTIES = [
@@ -12,7 +12,6 @@ const VALID_PROPERTIES = [
   "updated_at",
   "critic_id",
   "movie_id",
-  "critic",
 ];
 
 function hasOnlyValidProperties(req, res, next) {
