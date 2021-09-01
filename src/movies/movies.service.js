@@ -1,6 +1,6 @@
 const knex = require("../db/connection");
 
-function list(isShowing) {
+async function list(isShowing) {
   if (isShowing) {
     return await listActiveMovies();
   }

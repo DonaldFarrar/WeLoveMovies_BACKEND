@@ -15,3 +15,5 @@ function hasProperties(...properties) {
     }
   };
 }
+
+module.exports = hasProperties;
