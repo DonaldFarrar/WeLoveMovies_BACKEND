@@ -60,6 +60,7 @@ async function update(req, res) {
     review_id: res.locals.review.review_id,
   };
   const data = await reviewsService.update(newReview);
+  console.log(data);
   res.json({ data });
 }
 
