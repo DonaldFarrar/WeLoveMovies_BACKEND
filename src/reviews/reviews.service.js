@@ -2,7 +2,7 @@ const knex = require("../db/connection");
 const mapProperties = require("../utils/map-properties");
 
 function list(movie_id) {
-  return knex("review as r")
+  return knex("reviews as r")
     .join("critics as c", "r.critic_id", "c.critic_id")
     .select("r.*", "c.*")
     .where({ movie_id })
