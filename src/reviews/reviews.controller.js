@@ -40,7 +40,8 @@ async function reviewExists(req, res, next) {
 }
 
 async function list(req, res) {
-  const data = await reviewsService.list();
+  const { movieId } = req.params;
+  const data = await reviewsService.list(movieId);
   res.json({ data });
 }
 
@@ -59,9 +60,10 @@ async function update(req, res) {
     ...req.body.data,
     review_id: res.locals.review.review_id,
   };
-  const data = await reviewsService.update(newReview);
-  console.log(data);
-  res.json({ data });
+  await reviewsService.update(newReview);
+  const data = await reviewsService.read(res.locals.review.review_id);
+  const addCritics = await reviewsService.updateAddCritics(data);
+  res.json({ data: addCritics });
 }
 
 async function destroy(req, res) {

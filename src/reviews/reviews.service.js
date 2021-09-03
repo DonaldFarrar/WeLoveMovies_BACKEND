@@ -1,8 +1,16 @@
 const knex = require("../db/connection");
 const mapProperties = require("../utils/map-properties");
 
-function list() {
-  return knex("reviews").select("*");
+function list(movie_id) {
+  return knex("review as r")
+    .join("critics as c", "r.critic_id", "c.critic_id")
+    .select("r.*", "c.*")
+    .where({ movie_id })
+    .then((data) => {
+      return data.map((item) => {
+        return addCritics(item);
+      });
+    });
 }
 
 function create(review) {
@@ -19,10 +27,7 @@ const addCritics = mapProperties({
 });
 
 function read(review_id) {
-  return knex("reviews")
-    .select("*")
-    .where({ review_id })
-    .first()
+  return knex("reviews").select("*").where({ review_id }).first();
 }
 
 function update(newReview) {
@@ -35,25 +40,24 @@ function update(newReview) {
 
 function updateAddCritics(review) {
   return knex("reviews as r")
-  .select("*")
-  .join("critics as c", "c.critic_id", "r.critic_id")
-  .where({"r.review_id": review.review_id})
-  .first()
-  .then(addCritics)
+    .select("*")
+    .join("critics as c", "c.critic_id", "r.critic_id")
+    .where({ "r.review_id": review.review_id })
+    .first()
+    .then(addCritics);
 }
 
 function listReview(movieId) {
   return knex("review as r")
-  .join("critics as c", "r.critic_id", "c.critic_id")
-  .select("r*", "c.*")
-  .where({"r.movie_id": movieId})
-  .then((data) => {
-    return data.map((item) => {
-      return addCritics(item);
+    .join("critics as c", "r.critic_id", "c.critic_id")
+    .select("r.*", "c.*")
+    .where({ "r.movie_id": movieId })
+    .then((data) => {
+      return data.map((item) => {
+        return addCritics(item);
+      });
     });
-  });
 }
-
 
 function destroy(review_id) {
   return knex("reviews").where({ review_id }).del();
